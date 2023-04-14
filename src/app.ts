@@ -1,3 +1,5 @@
+#!/usr/bin/env ts-node
+
 import {Command} from "commander";
 import {searchForMovie} from "./commands/movie";
 import {searchForMusic} from "./commands/music";
@@ -12,9 +14,10 @@ program
 program.command('movie')
     .description('search movie base on title')
     .argument('<title>', 'movie title')
+    .option("-l , --limit <limit>" , "the limit of results")
     .addHelpCommand(true , "search for movie base on title.")
-    .action((title) => {
-       searchForMovie(title)
+    .action((title, {limit}) => {
+       searchForMovie(title , limit ? Number(limit) : 10)
     });
 program.command('song')
     .description('search song base on title')
