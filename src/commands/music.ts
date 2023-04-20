@@ -1,1 +1,23 @@
-export function searchForMusic(title:string,artist:string,type:string="song"){}
+import cheerio from "cheerio"
+import axios from "axios";
+import { contents } from "cheerio/lib/api/traversing";
+function parseData($) {
+  const baseUrl = 'https://invidious.nerdvpn.de'
+  return Array.from($(".pure-u-1"), (element) => {
+    const container = $(element).find(".h-box")
+    const linkContainer = $(container).find("a");
+    const url = baseUrl +   $(container).find(".video-card-row").find(".flex-right").find(".icon-buttons").find("a").filter(function(){return $(this).find(".ion-md-jet")}).next().next().attr("href")
+    const title = $(linkContainer).find("p").text()
+    return { title, url };
+  });
+}
+export async function searchForMusic(title: string, artist: string , limit:number) {
+  const songName = title.replaceAll(" ", "+")
+  const response = await axios.get(`https://invidious.nerdvpn.de/search?q=${songName}`)
+  const $ = cheerio.load(response.data)
+  console.log('Result is:')
+  parseData($).filter(c => c.url.indexOf("undefined") <=0 ).slice(0, limit).forEach(content => {
+    const { url, title } = content
+    console.log(`${title} - ${url} \n`)
+  });
+}
