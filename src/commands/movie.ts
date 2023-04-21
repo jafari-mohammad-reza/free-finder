@@ -1,5 +1,6 @@
 import cheerio from 'cheerio';
 import axios from "axios";
+import {logResult} from "../utils/logger";
 const parseResults = ($, baseUrl) => {
     return Array.from($(".flw-item"), (element) => {
         const titleContainer = $(element).find(".film-detail");
@@ -19,13 +20,13 @@ export async function searchForMovie(title: string, limit: number) {
         const response = await axios.get(`${baseUrl}/search/${encodedTitle}`)
             .catch(async () => await axios.get(fallbackUrl));
 
-        console.log(response.request.responseURL)
+
         baseUrl = response.request.host === "fmoviesto.cc" ? 'https://fmoviesto.cc' : baseUrl;
         const $ = await cheerio.load(response.data);
-        console.log('Result is:')
+        console.log('Result is: \n')
         parseResults($, baseUrl).slice(0, limit).forEach(content => {
             const {url,title} = content
-            console.log(`${title} - ${url} \n`)
+            logResult(title,url)
         });
 
     } catch (error) {

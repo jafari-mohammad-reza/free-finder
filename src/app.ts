@@ -19,14 +19,13 @@ program.command('movie')
     .action((title, {limit}) => {
        searchForMovie(title , limit ? Number(limit) : 10)
     });
-program.command('song')
-    .description('search song base on title')
-    .argument('<title>', 'song title')
-    .option('-a , --artist <artist>', 'song artist')
+program.command('music')
+    .description('search music base on title')
+    .argument('<title>', 'music title')
     .option("-l , --limit <limit>" , "the limit of results")
-    .addHelpCommand(true , "search for song base on title.")
-    .action((title,{artist,limit}) => {
-        searchForMusic(title,artist,limit ? Number(limit) : 5 )
+    .addHelpCommand(true , "search for music base on title.")
+    .action((title,{limit}) => {
+        searchForMusic(title,limit ? Number(limit) : 5 )
     });
 
 program.command('course')
