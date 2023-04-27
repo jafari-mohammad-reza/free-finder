@@ -1,9 +1,8 @@
-#!/usr/bin/env ts-node
+#!/usr/bin/env node
 
 import {Command} from "commander";
 import {searchForMovie} from "./commands/movie";
 import {searchForMusic} from "./commands/music";
-import {searchForCourse} from "./commands/course";
 
 const program = new Command();
 program
@@ -28,13 +27,5 @@ program.command('music')
         searchForMusic(title,limit ? Number(limit) : 5 )
     });
 
-program.command('course')
-    .description('search course base on title')
-    .argument('<title>', 'course title')
-    .option("-s, --source <source>" , "the source of course")
-    .addHelpCommand(true , "search for course base on title.")
-    .action((title,resource={source:"udemy"}) => {
-        searchForCourse(title , resource.source)
-    });
 
 program.parse();

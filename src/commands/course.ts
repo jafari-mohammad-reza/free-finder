@@ -1,1 +1,0 @@
-export function searchForCourse(title:string,resource:string){}
